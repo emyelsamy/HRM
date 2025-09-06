@@ -66,8 +66,8 @@ class ACTLossHead(nn.Module):
             is_correct = mask & (torch.argmax(outputs["logits"], dim=-1) == labels)
             seq_is_correct = is_correct.sum(-1) == loss_counts
             
-            # Metrics (halted)
-            valid_metrics = new_carry.halted & (loss_counts > 0)
+            # Metrics include any example with labels regardless of halting
+            valid_metrics = loss_counts > 0
             metrics = {
                 "count": valid_metrics.sum(),
                 
